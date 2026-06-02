@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Aviator Demo - Free</title>
+<style>
+body{ background:#0f172a; color:white; font-family:sans-serif; text-align:center; padding:50px }
+#plane{ font-size:60px; transition: all 0.1s; }
+#multiplier{ font-size:80px; font-weight:bold; color:#22c55e; }
+button{ padding:15px 40px; font-size:20px; background:#3b82f6; border:none; color:white; border-radius:10px; cursor:pointer }
+</style>
+</head>
+<body>
+<h1>✈️ Aviator Demo</h1>
+<div id="multiplier">1.00x</div>
+<div id="plane">✈️</div>
+<h2>Balance: <span id="balance">1000</span> Coins</h2>
+<button onclick="startGame()">Start Game</button>
+<button onclick="cashOut()" id="cashBtn" disabled>Cash Out</button>
+
+<script>
+let balance = 1000;
+let multiplier = 1.00;
+let gameRunning = false;
+let crashed = false;
+let bet = 0;
+
+function startGame(){
+  if(gameRunning) return;
+  bet = 100; // Demo bet
+  if(balance < bet){ alert("Coins khatam!"); return }
+  balance -= bet;
+  gameRunning = true;
+  crashed = false;
+  multiplier = 1.00;
+  document.getElementById('cashBtn').disabled = false;
+  updateUI();
+  
+  let crashPoint = 1 + Math.random() * 5; // 1x se 6x tak crash
+  
+  let interval = setInterval(()=>{
+    if(crashed){ clearInterval(interval); return }
+    multiplier += 0.02;
+    document.getElementById('plane').style.transform = `translateX(${multiplier*30}px) translateY(-${multiplier*10}px)`;
+    document.getElementById('multiplier').innerText = multiplier.toFixed(2)+'x';
+    
+    if(multiplier >= crashPoint){
+      crashed = true;
+      gameRunning = false;
+      document.getElementById('multiplier').innerText = 'CRASHED!';
+      document.getElementById('multiplier').style.color = 'red';
+      document.getElementById('cashBtn').disabled = true;
+      setTimeout(()=>{ document.getElementById('multiplier').style.color = '#22c55e'; }, 2000);
+    }
+  }, 50);
+}
+
+function cashOut(){
+  if(!gameRunning || crashed) return;
+  gameRunning = false;
+  let win = bet * multiplier;
+  balance += win;
+  alert('Cash Out! You won '+win.toFixed(0)+' coins at '+multiplier.toFixed(2)+'x');
+  document.getElementById('cashBtn').disabled = true;
+  updateUI();
+}
+
+function updateUI(){
+  document.getElementById('balance').innerText = balance.toFixed(0);
+}
+</script>
+</body>
+  </html>
