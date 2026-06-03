@@ -1,393 +1,149 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Zia Aviator God Edition</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zia Aviator Working</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{background:#020617;color:#fff;font-family:-apple-system,BlinkMacSystemFont,sans-serif;overflow:hidden}
-.glow{animation:glow 2s ease-in-out infinite alternate}
-@keyframes glow{from{text-shadow:0 0 10px #3b82f6}to{text-shadow:0 0 30px #8b5cf6}}
-.top{position:absolute;top:0;left:0;right:0;padding:12px 16px;background:rgba(2,6,23,0.9);backdrop-filter:blur(10px);z-index:100;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #1e293b}
-.brand{font-size:28px;font-weight:900;background:linear-gradient(90deg,#ff2d55,#fbbf24,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.balance-box{text-align:right}
-.coins{color:#fbbf24;font-size:18px;font-weight:800}
-.profit{font-size:12px;color:#10b981}
-
-.hist{position:absolute;top:65px;left:0;right:0;display:flex;gap:6px;padding:10px 12px;background:rgba(2,6,23,0.8);backdrop-filter:blur(10px);z-index:99;overflow-x:auto}
-.hist span{padding:6px 12px;border-radius:20px;font-size:13px;font-weight:800;border:2px solid transparent}
-.g{border-color:#10b981;background:rgba(16,185,129,0.2)}
-.b{border-color:#3b82f6;background:rgba(59,130,246,0.2)}
-.r{border-color:#ef4444;background:rgba(239,68,68,0.2)}
-.p{border-color:#a855f7;background:rgba(168,85,247,0.2)}
-.y{border-color:#fbbf24;background:rgba(251,191,36,0.2)}
-
-.game{height:100vh;background:radial-gradient(ellipse at center,#0f172a 0%,#020617 100%);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
-#stars{position:absolute;width:100%;height:100%}
-.star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;animation:twinkle 3s infinite}
-@keyframes twinkle{0%,100%{opacity:0.3}50%{opacity:1}}
-#plane{position:absolute;font-size:80px;z-index:10;filter:drop-shadow(0 0 30px rgba(59,130,246,1));transition:transform 0.03s linear}
-.trail{position:absolute;width:8px;height:8px;background:radial-gradient(circle,#3b82f6 0%,transparent 70%);border-radius:50%;pointer-events:none}
-.mult{font-size:95px;font-weight:900;color:#10b981;z-index:11;text-shadow:0 0 50px rgba(16,185,129,0.9)}
-.crash{color:#ef4444;animation:shake 0.5s;text-shadow:0 0 50px rgba(239,68,68,0.9)}
-@keyframes shake{0%,100%{transform:translateX(0) scale(1)}25%{transform:translateX(-10px) scale(1.05)}75%{transform:translateX(10px) scale(1.05)}}
-
-.bottom-panel{position:absolute;bottom:0;left:0;right:0;background:rgba(2,6,23,0.95);backdrop-filter:blur(15px);border-top:2px solid #1e293b;padding:16px;z-index:100;max-height:50vh;overflow-y:auto}
-.tabs{display:flex;gap:10px;margin-bottom:16px}
-.tab{flex:1;padding:12px;border-radius:16px;background:#1e293b;color:#94a3b8;font-size:15px;font-weight:700;text-align:center}
-.tab.active{background:linear-gradient(135deg,#3b82f6,#8b5cf6);color:#fff}
-
-.panel{display:none}
-.panel.active{display:block}
-
-.row{display:flex;gap:10px;align-items:center;margin-bottom:14px}
-.row button{width:52px;height:52px;border:none;background:#1e293b;color:#fff;border-radius:16px;font-size:28px;font-weight:900}
-.row input{flex:1;height:52px;background:#1e293b;border:2px solid #334155;color:#fff;text-align:center;font-size:24px;font-weight:900;border-radius:16px}
-
-.amt-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px}
-.amt{padding:14px 0;background:#1e293b;border:2px solid #334155;color:#fff;border-radius:16px;font-size:15px;font-weight:800}
-
-.btn{width:100%;padding:22px;border:none;border-radius:20px;font-size:22px;font-weight:900;color:#fff;cursor:pointer;letter-spacing:1px;transition:0.2s}
-.btn:active{transform:scale(0.95)}
-.btn-bet{background:linear-gradient(135deg,#10b981,#059669);box-shadow:0 8px 25px rgba(16,185,129,0.5)}
-.btn-cash{background:linear-gradient(135deg,#ef4444,#dc2626);display:none;box-shadow:0 8px 25px rgba(239,68,68,0.5)}
-
-.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
-.stat-box{background:#1e293b;padding:12px;border-radius:14px;text-align:center;border:1px solid #334155}
-.stat-val{font-size:20px;font-weight:900;color:#fbbf24}
-.stat-label{font-size:11px;color:#94a3b8;margin-top:4px}
-
-.chat-box{max-height:150px;overflow-y:auto;margin-top:12px;padding:10px;background:#0f172a;border-radius:12px;border:1px solid #334155}
-.chat-msg{font-size:12px;margin:4px 0;color:#cbd5e1}
-.chat-msg.me{color:#fbbf24;font-weight:700}
-
-.rain{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999}
-.rain span{position:absolute;font-size:24px;animation:fall 2.5s linear infinite}
-@keyframes fall{0%{top:-60px;opacity:1;transform:rotate(0deg)}100%{top:100vh;opacity:0;transform:rotate(360deg)}}
-
-.toast{position:fixed;top:120px;left:50%;transform:translateX(-50%);background:#10b981;padding:14px 24px;border-radius:14px;font-weight:800;z-index:1000;display:none;box-shadow:0 10px 30px rgba(16,185,129,0.4)}
+body{margin:0;background:#0a0a0a;color:#fff;font-family:Arial;text-align:center}
+.top{padding:15px;background:#111;font-size:18px}
+.coins{color:#ffd700;font-size:22px;font-weight:bold}
+.game{height:50vh;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center}
+#mult{font-size:70px;color:#00ff88;font-weight:bold}
+#plane{font-size:60px;margin-top:20px}
+.crash{color:red !important}
+.panel{padding:20px;background:#111}
+input{width:150px;height:50px;font-size:24px;text-align:center;background:#222;color:#fff;border:2px solid #444;border-radius:10px}
+button{width:100%;height:60px;font-size:22px;font-weight:bold;border:none;border-radius:12px;margin-top:15px}
+.bet{background:#00c853;color:#fff}
+.cash{background:#d50000;color:#fff;display:none}
+#msg{margin-top:10px;font-size:14px;color:#aaa}
 </style>
 </head>
 <body>
 
-<div class="toast" id="toast"></div>
-<div class="rain" id="rain"></div>
-
-<div class="top">
-  <div class="brand glow">ZIA AVIATOR</div>
-  <div class="balance-box">
-    <div class="coins"><span id="bal">100000</span> Coins</div>
-    <div class="profit">Profit: <span id="profit">0</span></div>
-  </div>
-</div>
-
-<div class="hist" id="hist"></div>
+<div class="top">Zia Aviator - Balance: <span class="coins" id="bal">100000</span> Coins</div>
 
 <div class="game">
-  <div id="stars"></div>
+  <div id="mult">1.00x</div>
   <div id="plane">✈️</div>
-  <div class="mult" id="mult">1.00x</div>
+  <div id="msg">Waiting...</div>
 </div>
 
-<div class="bottom-panel">
-  <div class="tabs">
-    <div class="tab active" onclick="switchTab('bet')">BET</div>
-    <div class="tab" onclick="switchTab('auto')">AUTO</div>
-    <div class="tab" onclick="switchTab('stats')">STATS</div>
-  </div>
-
-  <!-- BET PANEL -->
-  <div class="panel active" id="bet-panel">
-    <div class="row">
-      <button onclick="chg(1,-500)">−</button>
-      <input id="b1" value="1100" readonly>
-      <button onclick="chg(1,500)">+</button>
-    </div>
-    <div class="amt-grid">
-      <button class="amt" onclick="set(1,500)">500</button>
-      <button class="amt" onclick="set(1,1000)">1K</button>
-      <button class="amt" onclick="set(1,5000)">5K</button>
-      <button class="amt" onclick="set(1,10000)">10K</button>
-      <button class="amt" onclick="set(1,50000)">50K</button>
-    </div>
-    <button class="btn btn-bet" id="btn1" onclick="bet(1)">BET 1,100</button>
-    <button class="btn btn-cash" id="cash1" onclick="cash(1)">CASH OUT 0</button>
-  </div>
-
-  <!-- AUTO PANEL -->
-  <div class="panel" id="auto-panel">
-    <div class="row">
-      <input id="autoCash" placeholder="Auto Cashout at 2.00x" value="2.00" type="number" step="0.1">
-    </div>
-    <div class="row">
-      <input id="stopProfit" placeholder="Stop on Profit 10000" value="10000" type="number">
-    </div>
-    <div class="row">
-      <input id="stopLoss" placeholder="Stop on Loss 5000" value="5000" type="number">
-    </div>
-    <button class="btn btn-bet" onclick="startAuto()">START AUTO BET</button>
-  </div>
-
-  <!-- STATS PANEL -->
-  <div class="panel" id="stats-panel">
-    <div class="stats-grid">
-      <div class="stat-box">
-        <div class="stat-val" id="winRate">0%</div>
-        <div class="stat-label">Win Rate</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-val" id="maxMult">0x</div>
-        <div class="stat-label">Max Multiplier</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-val" id="rounds">0</div>
-        <div class="stat-label">Total Rounds</div>
-      </div>
-    </div>
-    <div class="chat-box" id="chatBox">
-      <div class="chat-msg me">***23: Nice win 8.5x!</div>
-      <div class="chat-msg">***67: Lag gaya mera 😂</div>
-      <div class="chat-msg">***12: 100K se 500K</div>
-    </div>
-    <input id="chatInput" placeholder="Type message..." style="width:100%;height:44px;margin-top:8px;background:#1e293b;border:2px solid #334155;border-radius:12px;padding:0 14px;color:#fff" onkeypress="if(event.key==='Enter') sendChat()">
-  </div>
+<div class="panel">
+  <input id="betAmt" value="1000" type="number">
+  <br>
+  <button class="bet" id="betBtn" onclick="placeBet()">BET 1000</button>
+  <button class="cash" id="cashBtn" onclick="doCashout()">CASH OUT 0</button>
 </div>
 
 <script>
 let balance = 100000;
-let startBalance = 100000;
-let mult = 1.00;
-let running = false;
+let betAmount = 1000;
+let currentMult = 1.00;
+let gameTimer = null;
+let betPlaced = false;
+let cashed = false;
 let crashed = false;
-let crashAt = 2.0;
-let gameInterval = null;
-let wins = 0, totalRounds = 0, maxMult = 0;
-let speech = window.speechSynthesis;
-let autoRunning = false;
+let crashPoint = 2.0;
 
-let betData = {active:false,amt:1100,cashed:false};
-let histArr = [4.87,2.65,9.95,9.84,2.73,7.61,1.99,8.12,3.05,12.45,15.67,18.23,21.5];
-
-// Stars background
-function createStars(){
-  let stars = document.getElementById('stars');
-  for(let i=0;i<100;i++){
-    let s = document.createElement('div');
-    s.className = 'star';
-    s.style.left = Math.random()*100+'%';
-    s.style.top = Math.random()*100+'%';
-    s.style.animationDelay = Math.random()*3+'s';
-    stars.appendChild(s);
-  }
-}
-createStars();
-
-function speak(text){
-  if(speech){
-    let u = new SpeechSynthesisUtterance(text);
-    u.lang = 'en-US';
-    u.rate = 1.2;
-    u.pitch = 1.1;
-    speech.speak(u);
-  }
+document.getElementById('betAmt').oninput = function(){
+  betAmount = parseInt(this.value) || 1000;
+  document.getElementById('betBtn').innerText = 'BET ' + betAmount;
 }
 
-function showToast(msg){
-  let t = document.getElementById('toast');
-  t.innerText = msg;
-  t.style.display = 'block';
-  setTimeout(()=>t.style.display='none', 2000);
-}
-
-function upd(){
+function updateBalance(){
   document.getElementById('bal').innerText = balance.toLocaleString();
-  let profit = balance - startBalance;
-  document.getElementById('profit').innerText = profit.toLocaleString();
-  document.getElementById('profit').style.color = profit>=0? '#10b981' : '#ef4444';
-  document.getElementById('b1').value = betData.amt.toLocaleString();
-  document.getElementById('btn1').innerText = 'BET '+betData.amt.toLocaleString();
-  document.getElementById('winRate').innerText = totalRounds>0? Math.floor(wins/totalRounds*100)+'%' : '0%';
-  document.getElementById('maxMult').innerText = maxMult.toFixed(2)+'x';
-  document.getElementById('rounds').innerText = totalRounds;
 }
 
-function switchTab(tab){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  event.target.classList.add('active');
-  document.getElementById(tab+'-panel').classList.add('active');
-  speak(tab+' mode');
+function placeBet(){
+  if(betPlaced || currentMult > 1.01){
+    alert('Wait for next round!');
+    return;
+  }
+  if(balance < betAmount){
+    alert('Coins kam hain!');
+    return;
+  }
+  
+  balance -= betAmount;
+  betPlaced = true;
+  cashed = false;
+  
+  document.getElementById('betBtn').style.display = 'none';
+  document.getElementById('cashBtn').style.display = 'block';
+  updateBalance();
+  document.getElementById('msg').innerText = 'Bet placed! Wait for takeoff...';
 }
 
-function set(v){ betData.amt=v; upd(); }
-function chg(d){ betData.amt = Math.max(500, betData.amt+d); upd(); }
-
-function bet(){
-  if(running || betData.active) return;
-  if(balance < betData.amt){ speak('Not enough coins'); showToast('💰 Coins kam hain'); return }
-  balance -= betData.amt;
-  betData.active = true;
-  betData.cashed = false;
-  document.getElementById('btn1').style.display='none';
-  document.getElementById('cash1').style.display='block';
-  speak('Bet placed');
-  upd();
-}
-
-function cash(){
-  if(!betData.active || betData.cashed) return;
-  betData.cashed = true;
-  let win = Math.floor(betData.amt * mult);
+function doCashout(){
+  if(!betPlaced || cashed || crashed){
+    return;
+  }
+  
+  cashed = true;
+  let win = Math.floor(betAmount * currentMult);
   balance += win;
-  wins++;
-  speak('Cash out! You won '+win.toLocaleString());
-  rainEffect();
-  document.getElementById('cash1').innerText = 'CASHED '+win.toLocaleString();
-  document.getElementById('cash1').disabled = true;
-  showToast('🎉 Won '+win.toLocaleString());
-  upd();
+  
+  document.getElementById('cashBtn').innerText = 'CASHED ' + win;
+  document.getElementById('cashBtn').disabled = true;
+  document.getElementById('msg').innerText = 'You won ' + win + ' coins!';
+  
+  updateBalance();
 }
 
-function rainEffect(){
-  let r = document.getElementById('rain');
-  for(let i=0;i<50;i++){
-    let s = document.createElement('span');
-    s.innerText = ['💰','💎','🔥','⚡'][Math.floor(Math.random()*4)];
-    s.style.left = Math.random()*100+'%';
-    s.style.animationDelay = Math.random()*0.5+'s';
-    r.appendChild(s);
-    setTimeout(()=>s.remove(),2500);
-  }
-}
-
-function round(){
-  running = true;
+function startGame(){
+  // Reset
+  currentMult = 1.00;
   crashed = false;
-  mult = 1.00;
-  crashAt = 1 + Math.random()*25; // 1x to 26x
-  totalRounds++;
-  document.getElementById('mult').className = 'mult';
-
-  if(betData.active &&!betData.cashed){
-    betData.active=false;
-    document.getElementById('btn1').style.display='block';
-    document.getElementById('cash1').style.display='none';
-    document.getElementById('cash1').disabled=false;
-  }
-
-  let trailCount = 0;
-  gameInterval = setInterval(()=>{
-    if(crashed){ clearInterval(gameInterval); return }
-
-    mult += 0.03 + mult*0.0015;
-    let x = mult*40, y = -mult*14;
-    document.getElementById('plane').style.transform = `translate(${x}px,${y}px)`;
-    document.getElementById('mult').innerText = mult.toFixed(2)+'x';
-
-    // Trail effect
-    trailCount++;
-    if(trailCount%3===0){
-      let t = document.createElement('div');
-      t.className = 'trail';
-      t.style.left = (x+40)+'px';
-      t.style.top = (y+40)+'px';
-      document.querySelector('.game').appendChild(t);
-      setTimeout(()=>t.remove(), 1000);
+  crashPoint = 1 + Math.random() * 10; // 1x to 11x crash
+  
+  document.getElementById('mult').innerText = '1.00x';
+  document.getElementById('mult').className = '';
+  document.getElementById('msg').innerText = 'Flying...';
+  document.getElementById('plane').style.transform = 'translateX(0px)';
+  
+  // Reset buttons
+  betPlaced = false;
+  cashed = false;
+  document.getElementById('betBtn').style.display = 'block';
+  document.getElementById('cashBtn').style.display = 'none';
+  document.getElementById('cashBtn').disabled = false;
+  document.getElementById('cashBtn').innerText = 'CASH OUT 0';
+  
+  // Game loop
+  gameTimer = setInterval(function(){
+    if(crashed) {
+      clearInterval(gameTimer);
+      return;
     }
-
-    // Voice milestones
-    if(Math.floor(mult)===2) speak('2x reached');
-    if(Math.floor(mult)===5) speak('Five times!');
-    if(Math.floor(mult)===10) speak('Ten times! Jackpot!');
-    if(Math.floor(mult)===20) speak('Twenty times! Mega win!');
-
-    // Auto cashout
-    if(betData.active &&!betData.cashed){
-      let autoCash = parseFloat(document.getElementById('autoCash').value);
-      if(autoRunning && mult >= autoCash) cash();
-      document.getElementById('cash1').innerText = 'CASH OUT '+ Math.floor(betData.amt*mult).toLocaleString();
+    
+    currentMult += 0.02;
+    document.getElementById('mult').innerText = currentMult.toFixed(2) + 'x';
+    document.getElementById('plane').style.transform = 'translateX(' + (currentMult*20) + 'px)';
+    
+    // Update cashout amount live
+    if(betPlaced && !cashed){
+      document.getElementById('cashBtn').innerText = 'CASH OUT ' + Math.floor(betAmount * currentMult);
     }
-
-    if(mult >= crashAt){
+    
+    // Crash check
+    if(currentMult >= crashPoint){
       crashed = true;
-      running = false;
-      clearInterval(gameInterval);
-      maxMult = Math.max(maxMult, mult);
-      speak('Crashed at '+mult.toFixed(2)+'x');
-      document.getElementById('mult').innerText = mult.toFixed(2)+'x FLEW AWAY!';
-      document.getElementById('mult').className = 'mult crash';
-      histArr.unshift(mult);
-      if(histArr.length>16) histArr.pop();
-      drawHist();
+      clearInterval(gameTimer);
+      document.getElementById('mult').innerText = currentMult.toFixed(2) + 'x CRASHED!';
+      document.getElementById('mult').className = 'crash';
+      document.getElementById('msg').innerText = 'Round over. Next in 3s...';
       
-      // Auto bet logic
-      if(autoRunning){
-        let stopProfit = parseFloat(document.getElementById('stopProfit').value);
-        let stopLoss = parseFloat(document.getElementById('stopLoss').value);
-        let profit = balance - startBalance;
-        if(profit >= stopProfit || profit <= -stopLoss){
-          autoRunning = false;
-          speak('Auto bet stopped');
-          showToast('⏹ Auto stopped');
-        } else {
-          setTimeout(()=>bet(), 1000);
-        }
-      }
-      
-      setTimeout(round, 4000);
+      // Reset for next round
+      setTimeout(startGame, 3000);
     }
-  }, 25);
+  }, 50);
 }
 
-function drawHist(){
-  document.getElementById('hist').innerHTML = histArr.map(m=>{
-    let cls = m<2?'b':m<3?'g':m<10?'r':m<15?'p':'y';
-    return `<span class="${cls}">${m.toFixed(2)}x</span>`;
-  }).join('');
-}
-
-function startAuto(){
-  autoRunning = true;
-  speak('Auto bet started');
-  showToast('🤖 Auto started');
-  if(!betData.active) bet();
-}
-
-function sendChat(){
-  let inp = document.getElementById('chatInput');
-  if(inp.value.trim()){
-    let box = document.getElementById('chatBox');
-    let msg = document.createElement('div');
-    msg.className = 'chat-msg me';
-    msg.innerText = 'You: '+inp.value;
-    box.appendChild(msg);
-    box.scrollTop = box.scrollHeight;
-    inp.value = '';
-  }
-}
-
-// Fake players
-setInterval(()=>{
-  if(!running && Math.random()>0.2){
-    let users = ['***23','***67','***12','***89','***45'];
-    let u = users[Math.floor(Math.random()*5)];
-    let b = [1000,5000,10000,25000,50000][Math.floor(Math.random()*5)];
-    let m = (1+Math.random()*6).toFixed(2);
-    let win = Math.floor(b*m);
-    let box = document.getElementById('chatBox');
-    let msg = document.createElement('div');
-    msg.className = 'chat-msg';
-    msg.innerText = u+': Won '+win.toLocaleString()+' at '+m+'x';
-    box.appendChild(msg);
-    box.scrollTop = box.scrollHeight;
-    if(box.children.length>15) box.removeChild(box.firstChild);
-  }
-}, 800);
-
-drawHist();
-upd();
-speak('Welcome to Zia Aviator God Edition');
-setTimeout(round, 3000);
+// Start first round after 3 seconds
+setTimeout(startGame, 3000);
+updateBalance();
 </script>
+
 </body>
-  </html>
+</html>
