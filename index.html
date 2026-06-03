@@ -2,185 +2,101 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zia Aviator Pro Max</title>
+<title>Test</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#000;color:#fff;font-family:Arial}
-.top{padding:15px;background:#111;display:flex;justify-content:space-between;align-items:center}
-.coins{color:#ffd700;font-size:20px;font-weight:bold}
-.mute{padding:8px 15px;background:#333;border:none;color:#fff;border-radius:8px;font-size:14px}
-.game{height:55vh;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center}
-#mult{font-size:80px;font-weight:900;color:#00ff88;transition:0.1s}
-.crash{color:#ff3333 !important;transform:scale(1.1)}
-#plane{font-size:70px;margin:20px;transition:0.1s}
-.status{color:#aaa;font-size:16px;margin-top:10px}
-.panel{padding:20px;background:#111}
-.bet-row{display:flex;gap:10px;margin-bottom:15px}
-.bet-row button{flex:1;padding:15px;background:#222;border:none;color:#fff;border-radius:10px;font-size:16px;font-weight:bold}
-input{width:100%;height:55px;font-size:26px;text-align:center;background:#222;color:#fff;border:2px solid #444;border-radius:12px}
-.main-btn{width:100%;height:65px;font-size:24px;font-weight:900;border:none;border-radius:15px;margin-top:15px}
-.bet{background:linear-gradient(135deg,#00c853,#00e676);color:#000}
-.cash{background:linear-gradient(135deg,#ff1744,#ff5252);color:#fff;display:none}
-.hist{display:flex;gap:5px;padding:10px;overflow-x:auto;background:#0a0a0a}
-.hist span{padding:5px 10px;border-radius:15px;font-size:12px;font-weight:bold}
-.g{background:#00c853}.r{background:#ff1744}.b{background:#2979ff}
+body{background:#000;color:#fff;font-family:Arial;text-align:center;padding:20px}
+h1{color:#ffd700}
+#bal{font-size:40px;color:#00ff88;margin:20px}
+button{width:100%;height:80px;font-size:30px;font-weight:bold;border:none;border-radius:15px;margin:10px 0}
+#bet{background:#00c853;color:#000}
+#cash{background:#d50000;color:#fff}
+input{width:200px;height:60px;font-size:28px;text-align:center}
+#msg{font-size:20px;margin:20px;color:#0ff}
 </style>
 </head>
 <body>
 
-<div class="top">
-  <div>Zia Aviator Pro</div>
-  <div style="display:flex;gap:10px;align-items:center">
-    <div class="coins" id="bal">100000</div>
-    <button class="mute" id="muteBtn" onclick="toggleMute()">🔊 Sound</button>
-  </div>
-</div>
+<h1>Zia Test</h1>
+<div>Balance: <span id="bal">100000</span> Coins</div>
 
-<div class="hist" id="hist"></div>
+<input id="amt" value="1000" type="number">
 
-<div class="game">
-  <div id="mult">1.00x</div>
-  <div id="plane">✈️</div>
-  <div class="status" id="status">Next round starting...</div>
-</div>
+<button id="bet" onclick="doBet()">1. BET LAGAO</button>
+<button id="cash" onclick="doCash()" style="display:none">2. CASHOUT KARO</button>
 
-<div class="panel">
-  <div class="bet-row">
-    <button onclick="setBet(500)">500</button>
-    <button onclick="setBet(1000)">1000</button>
-    <button onclick="setBet(5000)">5K</button>
-    <button onclick="setBet(10000)">10K</button>
-  </div>
-  <input id="betInput" value="1000" type="number">
-  <button class="main-btn bet" id="betBtn" onclick="bet()">BET 1000</button>
-  <button class="main-btn cash" id="cashBtn" onclick="cashout()">CASH OUT 0</button>
-</div>
+<div id="msg">Pehle BET dabao</div>
+<div id="mult">Multiplier: 1.00x</div>
 
 <script>
 let balance = 100000;
-let betAmount = 1000;
+let betAmt = 1000;
+let betLaga = false;
 let mult = 1.00;
-let crashAt = 2.0;
-let gameRunning = false;
-let betActive = false;
-let cashed = false;
-let soundOn = true;
-let gameLoop = null;
-let history = [2.45, 1.89, 5.67, 3.21, 8.90, 1.23, 12.5];
+let timer = null;
 
-function toggleMute(){
-  soundOn = !soundOn;
-  document.getElementById('muteBtn').innerText = soundOn ? '🔊 Sound' : '🔇 Mute';
+function upd(){
+  document.getElementById('bal').innerText = balance;
+  document.getElementById('amt').value = betAmt;
 }
 
-function setBet(amt){
-  betAmount = amt;
-  document.getElementById('betInput').value = amt;
-  document.getElementById('betBtn').innerText = 'BET ' + amt.toLocaleString();
+document.getElementById('amt').onchange = function(){
+  betAmt = parseInt(this.value);
 }
 
-document.getElementById('betInput').oninput = function(){
-  betAmount = parseInt(this.value) || 1000;
-  document.getElementById('betBtn').innerText = 'BET ' + betAmount.toLocaleString();
-}
-
-function updateUI(){
-  document.getElementById('bal').innerText = balance.toLocaleString();
-}
-
-function drawHistory(){
-  document.getElementById('hist').innerHTML = history.map(m => {
-    let cls = m < 2 ? 'b' : m < 3 ? 'g' : 'r';
-    return `<span class="${cls}">${m.toFixed(2)}x</span>`;
-  }).join('');
-}
-
-function bet(){
-  if(gameRunning || betActive){
-    alert('Round chal raha hai! Next round ka wait karo');
-    return;
-  }
-  if(balance < betAmount){
-    alert('Coins khatam! Page refresh karo 100000 wapis mil jayenge');
+// BET BUTTON
+function doBet(){
+  if(betLaga){
+    alert('Pehle CASHOUT karo bhai!');
     return;
   }
   
-  balance -= betAmount;
-  betActive = true;
-  cashed = false;
+  if(balance < betAmt){
+    alert('Coins kam hain!');
+    return;
+  }
   
-  document.getElementById('betBtn').style.display = 'none';
-  document.getElementById('cashBtn').style.display = 'block';
-  document.getElementById('status').innerText = 'Bet placed! Good luck...';
-  updateUI();
-}
-
-function cashout(){
-  if(!betActive || cashed) return;
+  // PAISA KAT GAYA
+  balance = balance - betAmt;
+  betLaga = true;
   
-  cashed = true;
-  let win = Math.floor(betAmount * mult);
-  balance += win;
+  document.getElementById('bet').style.display = 'none';
+  document.getElementById('cash').style.display = 'block';
+  document.getElementById('msg').innerText = 'Bet lag gaya! ' + betAmt + ' coins kat gaye';
   
-  document.getElementById('cashBtn').innerText = 'WON ' + win.toLocaleString();
-  document.getElementById('cashBtn').disabled = true;
-  document.getElementById('status').innerText = 'Cashed out at ' + mult.toFixed(2) + 'x! 🎉';
-  
-  updateUI();
-}
-
-function newRound(){
-  gameRunning = true;
-  betActive = false;
-  cashed = false;
+  // Multiplier barhana shuru
   mult = 1.00;
-  crashAt = 1 + Math.random() * 15; // 1x to 16x
+  timer = setInterval(function(){
+    mult = mult + 0.05;
+    document.getElementById('mult').innerText = 'Multiplier: ' + mult.toFixed(2) + 'x';
+    document.getElementById('cash').innerText = '2. CASHOUT ' + Math.floor(betAmt * mult);
+  }, 100);
   
-  document.getElementById('mult').innerText = '1.00x';
-  document.getElementById('mult').className = '';
-  document.getElementById('plane').style.transform = 'translateX(0px)';
-  document.getElementById('status').innerText = 'Take off...';
-  
-  document.getElementById('betBtn').style.display = 'block';
-  document.getElementById('cashBtn').style.display = 'none';
-  document.getElementById('cashBtn').disabled = false;
-  document.getElementById('cashBtn').innerText = 'CASH OUT 0';
-  
-  gameLoop = setInterval(() => {
-    if(!gameRunning) {
-      clearInterval(gameLoop);
-      return;
-    }
-    
-    mult += 0.025;
-    document.getElementById('mult').innerText = mult.toFixed(2) + 'x';
-    document.getElementById('plane').style.transform = 'translateX(' + (mult * 25) + 'px)';
-    
-    // Live cashout update
-    if(betActive && !cashed){
-      document.getElementById('cashBtn').innerText = 'CASH OUT ' + Math.floor(betAmount * mult).toLocaleString();
-    }
-    
-    if(mult >= crashAt){
-      gameRunning = false;
-      clearInterval(gameLoop);
-      document.getElementById('mult').innerText = mult.toFixed(2) + 'x CRASHED';
-      document.getElementById('mult').className = 'crash';
-      document.getElementById('status').innerText = 'Flew away! Next round in 4s...';
-      
-      history.unshift(mult);
-      if(history.length > 12) history.pop();
-      drawHistory();
-      
-      setTimeout(newRound, 4000);
-    }
-  }, 40);
+  upd();
 }
 
-// Start
-drawHistory();
-updateUI();
-setTimeout(newRound, 2000);
+// CASHOUT BUTTON  
+function doCash(){
+  if(!betLaga){
+    alert('Pehle BET lagao!');
+    return;
+  }
+  
+  clearInterval(timer);
+  
+  let win = Math.floor(betAmt * mult);
+  balance = balance + win;
+  
+  document.getElementById('cash').style.display = 'none';
+  document.getElementById('bet').style.display = 'block';
+  document.getElementById('msg').innerText = 'Cashout ho gaya! ' + win + ' coins mile';
+  document.getElementById('mult').innerText = 'Multiplier: 1.00x';
+  
+  betLaga = false;
+  upd();
+}
+
+upd();
 </script>
+
 </body>
-    </html>
+</html>
