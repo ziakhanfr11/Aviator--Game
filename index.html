@@ -2,100 +2,137 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Test</title>
+<title>Zia Aviator Diamond</title>
 <style>
-body{background:#000;color:#fff;font-family:Arial;text-align:center;padding:20px}
-h1{color:#ffd700}
-#bal{font-size:40px;color:#00ff88;margin:20px}
-button{width:100%;height:80px;font-size:30px;font-weight:bold;border:none;border-radius:15px;margin:10px 0}
-#bet{background:#00c853;color:#000}
-#cash{background:#d50000;color:#fff}
-input{width:200px;height:60px;font-size:28px;text-align:center}
-#msg{font-size:20px;margin:20px;color:#0ff}
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#050510;color:#fff;font-family:'Orbitron',sans-serif;overflow:hidden}
+
+.topbar{padding:18px;background:linear-gradient(90deg,#0a0a2a,#1a1a4a,#0a0a2a);border-bottom:2px solid #00f0ff;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:22px;font-weight:900;letter-spacing:2px;background:linear-gradient(90deg,#00f0ff,#ff00ff,#00f0ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 3s infinite}
+@keyframes shimmer{0%,100%{filter:brightness(1)}50%{filter:brightness(1.8)}}
+.balance{font-size:20px;color:#ffd700;text-shadow:0 0 10px #ffd700}
+
+.hist{display:flex;gap:6px;padding:12px;background:rgba(0,0,0,0.6);overflow-x:auto;border-bottom:1px solid #00f0ff33}
+.hist span{padding:6px 10px;border-radius:20px;font-size:11px;font-weight:bold;border:1px solid;backdrop-filter:blur(5px)}
+.g{border-color:#00ff88;background:rgba(0,255,136,0.15)}
+.r{border-color:#ff0066;background:rgba(255,0,102,0.15)}
+.b{border-color:#00aaff;background:rgba(0,170,255,0.15)}
+
+.gamearea{height:52vh;position:relative;background:radial-gradient(circle at center,#001122 0%,#000 100%);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.grid{position:absolute;width:100%;height:100%;background-image:linear-gradient(rgba(0,240,255,0.1) 1px,transparent 1px),linear-gradient(90deg,rgba(0,240,255,0.1) 1px,transparent 1px);background-size:40px 40px;animation:moveGrid 10s linear infinite}
+@keyframes moveGrid{0%{transform:translate(0,0)}100%{transform:translate(40px,40px)}}
+
+.mult{font-size:95px;font-weight:900;color:#00ff88;text-shadow:0 0 40px #00ff88,0 0 80px #00ff88;z-index:5;transition:0.1s}
+.plane{font-size:75px;z-index:5;transition:transform 0.1s;filter:drop-shadow(0 0 25px #00aaff);margin-top:20px}
+.crash{color:#ff0066 !important;text-shadow:0 0 40px #ff0066 !important;animation:shake 0.3s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+.status{margin-top:15px;font-size:14px;color:#00f0ff;z-index:5;letter-spacing:1px}
+
+.control{padding:20px;background:linear-gradient(180deg,rgba(10,10,30,0.9),rgba(0,0,0,0.95));border-top:2px solid #00f0ff}
+.chips{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.chips button{padding:12px;background:linear-gradient(135deg,#1a1a3a,#2a2a5a);border:1px solid #00f0ff66;color:#00f0ff;border-radius:12px;font-family:'Orbitron';font-size:13px;font-weight:700}
+.chips button:active{transform:scale(0.9);background:#00f0ff}
+
+.inputbox{width:100%;height:55px;background:#0a0a1a;border:2px solid #00f0ff;border-radius:15px;color:#00ff88;font-family:'Orbitron';font-size:26px;text-align:center;font-weight:900;box-shadow:0 0 20px rgba(0,240,255,0.3)}
+
+.bigbtn{width:100%;height:70px;border:none;border-radius:18px;font-family:'Orbitron';font-size:26px;font-weight:900;margin-top:15px;letter-spacing:1px;transition:0.2s}
+.bigbtn:active{transform:scale(0.95)}
+.betbtn{background:linear-gradient(135deg,#00ff88,#00cc66);color:#000;box-shadow:0 0 30px rgba(0,255,136,0.5)}
+.cashbtn{background:linear-gradient(135deg,#ff0066,#cc0052);color:#fff;box-shadow:0 0 30px rgba(255,0,102,0.5);display:none}
 </style>
 </head>
 <body>
 
-<h1>Zia Test</h1>
-<div>Balance: <span id="bal">100000</span> Coins</div>
+<div class="topbar">
+  <div class="logo">ZIA AVIATOR DIAMOND</div>
+  <div class="balance" id="bal">100,000</div>
+</div>
 
-<input id="amt" value="1000" type="number">
+<div class="hist" id="hist"></div>
 
-<button id="bet" onclick="doBet()">1. BET LAGAO</button>
-<button id="cash" onclick="doCash()" style="display:none">2. CASHOUT KARO</button>
+<div class="gamearea">
+  <div class="grid"></div>
+  <div class="mult" id="mult">1.00x</div>
+  <div class="plane" id="plane">✈️</div>
+  <div class="status" id="status">BET PLACE KARO</div>
+</div>
 
-<div id="msg">Pehle BET dabao</div>
-<div id="mult">Multiplier: 1.00x</div>
+<div class="control">
+  <div class="chips">
+    <button onclick="setBet(500)">500</button>
+    <button onclick="setBet(1000)">1K</button>
+    <button onclick="setBet(5000)">5K</button>
+    <button onclick="setBet(10000)">10K</button>
+  </div>
+  <input class="inputbox" id="betInput" value="1000" type="number">
+  <button class="bigbtn betbtn" id="betBtn" onclick="bet()">BET 1000</button>
+  <button class="bigbtn cashbtn" id="cashBtn" onclick="cashout()">CASH OUT 0</button>
+</div>
 
 <script>
 let balance = 100000;
-let betAmt = 1000;
-let betLaga = false;
+let betAmount = 1000;
 let mult = 1.00;
-let timer = null;
+let crashAt = 2.8;
+let loop = null;
+let hasBet = false;
+let cashed = false;
+let histData = [4.56, 1.87, 7.23, 2.11, 11.5, 1.45];
 
-function upd(){
-  document.getElementById('bal').innerText = balance;
-  document.getElementById('amt').value = betAmt;
-}
+function setBet(a){betAmount=a;document.getElementById('betInput').value=a;document.getElementById('betBtn').innerText='BET '+a.toLocaleString()}
+document.getElementById('betInput').oninput=function(){betAmount=parseInt(this.value)||1000;document.getElementById('betBtn').innerText='BET '+betAmount.toLocaleString()}
+function upd(){document.getElementById('bal').innerText=balance.toLocaleString()}
+function drawHist(){document.getElementById('hist').innerHTML=histData.map(m=>{let c=m<2?'b':m<3?'g':'r';return `<span class="${c}">${m.toFixed(2)}x</span>`}).join('')}
 
-document.getElementById('amt').onchange = function(){
-  betAmt = parseInt(this.value);
-}
-
-// BET BUTTON
-function doBet(){
-  if(betLaga){
-    alert('Pehle CASHOUT karo bhai!');
-    return;
-  }
-  
-  if(balance < betAmt){
-    alert('Coins kam hain!');
-    return;
-  }
-  
-  // PAISA KAT GAYA
-  balance = balance - betAmt;
-  betLaga = true;
-  
-  document.getElementById('bet').style.display = 'none';
-  document.getElementById('cash').style.display = 'block';
-  document.getElementById('msg').innerText = 'Bet lag gaya! ' + betAmt + ' coins kat gaye';
-  
-  // Multiplier barhana shuru
-  mult = 1.00;
-  timer = setInterval(function(){
-    mult = mult + 0.05;
-    document.getElementById('mult').innerText = 'Multiplier: ' + mult.toFixed(2) + 'x';
-    document.getElementById('cash').innerText = '2. CASHOUT ' + Math.floor(betAmt * mult);
-  }, 100);
-  
+function bet(){
+  if(hasBet){alert('Pehle wala khatam karo!');return}
+  if(balance<betAmount){alert('Coins khatam! Refresh karo');balance=100000;upd();return}
+  balance-=betAmount;hasBet=true;cashed=false;
+  document.getElementById('betBtn').style.display='none';
+  document.getElementById('cashBtn').style.display='block';
+  document.getElementById('status').innerText='BET PLACED - '+betAmount+' KAT GAYE';
   upd();
 }
 
-// CASHOUT BUTTON  
-function doCash(){
-  if(!betLaga){
-    alert('Pehle BET lagao!');
-    return;
-  }
-  
-  clearInterval(timer);
-  
-  let win = Math.floor(betAmt * mult);
-  balance = balance + win;
-  
-  document.getElementById('cash').style.display = 'none';
-  document.getElementById('bet').style.display = 'block';
-  document.getElementById('msg').innerText = 'Cashout ho gaya! ' + win + ' coins mile';
-  document.getElementById('mult').innerText = 'Multiplier: 1.00x';
-  
-  betLaga = false;
+function cashout(){
+  if(!hasBet||cashed)return;
+  cashed=true;let win=Math.floor(betAmount*mult);balance+=win;
+  document.getElementById('cashBtn').innerText='WON '+win.toLocaleString();
+  document.getElementById('cashBtn').disabled=true;
+  document.getElementById('status').innerText='CASHED AT '+mult.toFixed(2)+'x ✓';
   upd();
 }
 
-upd();
+function game(){
+  mult=1.00;crashAt=1+Math.random()*15;
+  document.getElementById('mult').innerText='1.00x';document.getElementById('mult').className='mult';
+  document.getElementById('plane').style.transform='translateX(0px)';
+  document.getElementById('status').innerText='FLYING...';
+  hasBet=false;cashed=false;
+  document.getElementById('betBtn').style.display='block';
+  document.getElementById('cashBtn').style.display='none';
+  document.getElementById('cashBtn').disabled=false;
+  document.getElementById('cashBtn').innerText='CASH OUT 0';
+  
+  loop=setInterval(()=>{
+    mult+=0.025;
+    document.getElementById('mult').innerText=mult.toFixed(2)+'x';
+    document.getElementById('plane').style.transform='translateX('+(mult*20)+'px)';
+    if(hasBet&&!cashed){document.getElementById('cashBtn').innerText='CASH OUT '+Math.floor(betAmount*mult).toLocaleString()}
+    if(mult>=crashAt){
+      clearInterval(loop);
+      document.getElementById('mult').innerText=mult.toFixed(2)+'x CRASHED';
+      document.getElementById('mult').className='mult crash';
+      document.getElementById('status').innerText='FLEW AWAY! 3s...';
+      histData.unshift(mult);if(histData.length>12)histData.pop();drawHist();
+      setTimeout(game,3000);
+    }
+  },45);
+}
+
+drawHist();upd();setTimeout(game,2000);
 </script>
 
 </body>
