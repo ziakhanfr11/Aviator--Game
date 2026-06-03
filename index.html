@@ -2,103 +2,101 @@
 <html lang="en">
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Aviator Clone Demo</title>
+<title>Zia Aviator Demo</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{background:#0b0f1a;color:#fff;font-family:-apple-system,BlinkMacSystemFont,sans-serif;touch-action:manipulation}
-.top{padding:12px 16px;background:#121827;display:flex;justify-content:space-between;align-items:center;font-size:14px}
-.logo{color:#ff2d55;font-size:22px;font-weight:800}
-.balance{color:#fbbf24;font-weight:600}
-.history{display:flex;gap:6px;padding:8px 12px;background:#0f1420;overflow-x:auto;scrollbar-width:none}
-.history::-webkit-scrollbar{display:none}
-.history span{padding:4px 10px;border-radius:20px;font-size:13px;font-weight:600}
-.g{ background:#22c55e }.b{background:#3b82f6}.r{background:#ef4444}
+body{background:#0a0e17;color:#fff;font-family:system-ui,sans-serif;touch-action:manipulation}
+.top{padding:12px 16px;background:#111827;display:flex;justify-content:space-between;align-items:center}
+.brand{color:#ff2d55;font-size:24px;font-weight:800}
+.coins{color:#fbbf24;font-size:15px;font-weight:700}
 
-.game{height:42vh;background:radial-gradient(ellipse at center,#1e293b 0%,#0b0f1a 100%);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
-#plane{position:absolute;font-size:55px;transition:transform 0.08s linear;z-index:2}
-.mult{font-size:68px;font-weight:900;color:#22c55e;z-index:3;text-shadow:0 0 20px rgba(34,197,94,0.5)}
-.crash{color:#ef4444;text-shadow:0 0 20px rgba(239,68,68,0.5)}
-.status{position:absolute;bottom:20px;font-size:14px;color:#94a3b8}
+.hist{display:flex;gap:6px;padding:8px 12px;background:#0f172a;overflow-x:auto}
+.hist span{padding:5px 11px;border-radius:20px;font-size:13px;font-weight:700}
+.g{background:#10b981}.b{background:#3b82f6}.r{background:#ef4444}
+
+.game{height:40vh;background:radial-gradient(ellipse at center,#1e293b 0%,#0a0e17 100%);position:relative;display:flex;align-items:center;justify-content:center}
+#plane{position:absolute;font-size:60px;z-index:2;transition:transform 0.07s linear}
+.mult{font-size:72px;font-weight:900;color:#10b981;z-index:3;text-shadow:0 0 25px rgba(16,185,129,0.6)}
+.crash{color:#ef4444;text-shadow:0 0 25px rgba(239,68,68,0.6)}
 
 .panels{padding:12px;display:flex;flex-direction:column;gap:12px}
-.panel{background:#121827;border-radius:14px;padding:14px}
-.tabs{display:flex;gap:8px;margin-bottom:12px}
-.tab{padding:6px 14px;background:#1e293b;border-radius:8px;font-size:13px;color:#94a3b8}
+.panel{background:#111827;border-radius:16px;padding:16px}
+.tabs{display:flex;gap:8px;margin-bottom:14px}
+.tab{padding:7px 16px;background:#1f2937;border-radius:10px;font-size:14px;color:#9ca3af}
 .tab.active{background:#3b82f6;color:#fff}
 
-.input-row{display:flex;gap:8px;align-items:center;margin-bottom:10px}
-.input-row button{width:40px;height:40px;border:none;background:#1e293b;color:#fff;border-radius:8px;font-size:20px}
-.input-row input{flex:1;height:40px;background:#1e293b;border:none;color:#fff;text-align:center;font-size:18px;font-weight:600;border-radius:8px}
+.row{display:flex;gap:8px;align-items:center;margin-bottom:10px}
+.row button{width:44px;height:44px;border:none;background:#1f2937;color:#fff;border-radius:10px;font-size:22px;font-weight:700}
+.row input{flex:1;height:44px;background:#1f2937;border:none;color:#fff;text-align:center;font-size:19px;font-weight:700;border-radius:10px}
 
-.amt-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
-.amt{padding:10px 0;background:#1e293b;border:none;color:#fff;border-radius:8px;font-size:13px;font-weight:600}
+.amt-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:14px}
+.amt{padding:11px 0;background:#1f2937;border:none;color:#fff;border-radius:10px;font-size:14px;font-weight:700}
 
-.btn-main{width:100%;padding:16px;border:none;border-radius:12px;font-size:17px;font-weight:800;color:#fff}
-.btn-bet{background:linear-gradient(135deg,#22c55e,#16a34a)}
+.btn{width:100%;padding:17px;border:none;border-radius:14px;font-size:18px;font-weight:800;color:#fff}
+.btn-bet{background:linear-gradient(135deg,#10b981,#059669)}
 .btn-cash{background:linear-gradient(135deg,#ef4444,#dc2626);display:none}
 
-.bets{padding:0 12px 80px}
-.bets h3{font-size:14px;margin-bottom:8px;color:#94a3b8}
-.bets table{width:100%;font-size:12px;border-collapse:collapse}
-.bets td{padding:8px 4px;border-bottom:1px solid #1e293b}
+.list{padding:0 12px 60px}
+.list h3{font-size:14px;margin-bottom:8px;color:#9ca3af}
+.list table{width:100%;font-size:13px;border-collapse:collapse}
+.list td{padding:9px 4px;border-bottom:1px solid #1f2937}
 .me{color:#fbbf24}
-.win{color:#22c55e}
+.win{color:#10b981}
 </style>
 </head>
 <body>
 
 <div class="top">
-  <div class="logo">Aviator</div>
-  <div class="balance"><span id="bal">100000</span> Coins</div>
+  <div class="brand">Zia Aviator</div>
+  <div class="coins"><span id="bal">100000</span> Coins</div>
 </div>
 
-<div class="history" id="hist"></div>
+<div class="hist" id="hist"></div>
 
 <div class="game">
   <div id="plane">✈️</div>
   <div class="mult" id="mult">1.00x</div>
-  <div class="status" id="status">Waiting for next round...</div>
 </div>
 
 <div class="panels">
   <!-- Panel 1 -->
   <div class="panel">
     <div class="tabs"><div class="tab active">Bet</div><div class="tab">Auto</div></div>
-    <div class="input-row">
-      <button onclick="chg(1,-10)">−</button>
-      <input id="b1" value="100" readonly>
-      <button onclick="chg(1,10)">+</button>
+    <div class="row">
+      <button onclick="chg(1,-100)">−</button>
+      <input id="b1" value="1100" readonly>
+      <button onclick="chg(1,100)">+</button>
     </div>
-    <div class="amt-row">
+    <div class="amt-grid">
       <button class="amt" onclick="set(1,20)">20</button>
       <button class="amt" onclick="set(1,100)">100</button>
       <button class="amt" onclick="set(1,500)">500</button>
       <button class="amt" onclick="set(1,1000)">1000</button>
     </div>
-    <button class="btn-main btn-bet" id="btn1" onclick="bet(1)">Bet 100</button>
-    <button class="btn-main btn-cash" id="cash1" onclick="cash(1)">Cash Out 0.00</button>
+    <button class="btn btn-bet" id="btn1" onclick="bet(1)">Bet 1100</button>
+    <button class="btn btn-cash" id="cash1" onclick="cash(1)">Cash Out</button>
   </div>
 
   <!-- Panel 2 -->
   <div class="panel">
     <div class="tabs"><div class="tab active">Bet</div><div class="tab">Auto</div></div>
-    <div class="input-row">
-      <button onclick="chg(2,-10)">−</button>
+    <div class="row">
+      <button onclick="chg(2,-100)">−</button>
       <input id="b2" value="100" readonly>
-      <button onclick="chg(2,10)">+</button>
+      <button onclick="chg(2,100)">+</button>
     </div>
-    <div class="amt-row">
+    <div class="amt-grid">
       <button class="amt" onclick="set(2,20)">20</button>
       <button class="amt" onclick="set(2,100)">100</button>
       <button class="amt" onclick="set(2,500)">500</button>
       <button class="amt" onclick="set(2,1000)">1000</button>
     </div>
-    <button class="btn-main btn-bet" id="btn2" onclick="bet(2)">Bet 100</button>
-    <button class="btn-main btn-cash" id="cash2" onclick="cash(2)">Cash Out 0.00</button>
+    <button class="btn btn-bet" id="btn2" onclick="bet(2)">Bet 100</button>
+    <button class="btn btn-cash" id="cash2" onclick="cash(2)">Cash Out</button>
   </div>
 </div>
 
-<div class="bets">
+<div class="list">
   <h3>All Bets</h3>
   <table id="tbl"></table>
 </div>
@@ -108,9 +106,9 @@ let balance = 100000;
 let mult = 1.00;
 let running = false;
 let crashed = false;
-let crashAt = 1.5;
-let betData = {1:{active:false,amt:100,cashed:false}, 2:{active:false,amt:100,cashed:false}};
-let histArr = [6.59,1.17,2.92,7.55,1.26,1.00,1.15,2.57];
+let crashAt = 2.0;
+let betData = {1:{active:false,amt:1100,cashed:false}, 2:{active:false,amt:100,cashed:false}};
+let histArr = [4.87,2.65,2.65,9.95,9.84,2.73,7.61];
 
 function upd(){
   document.getElementById('bal').innerText = balance.toLocaleString();
@@ -125,22 +123,23 @@ function chg(n,d){ betData[n].amt = Math.max(20, betData[n].amt+d); upd(); }
 
 function bet(n){
   if(running || betData[n].active) return;
-  if(balance < betData[n].amt){ alert('Coins kam hain bhai'); return }
+  if(balance < betData[n].amt){ alert('Coins kam hain'); return }
   balance -= betData[n].amt;
   betData[n].active = true;
   document.getElementById('btn'+n).style.display='none';
   document.getElementById('cash'+n).style.display='block';
+  document.getElementById('cash'+n).innerText = 'Cash Out '+ (betData[n].amt*mult).toFixed(0);
   upd();
 }
 
 function cash(n){
-  if(!betData[n].active || betData[n].cashed || crashed) return;
+  if(!betData[n].active || betData[n].cashed) return;
   betData[n].cashed = true;
-  let win = betData[n].amt * mult;
+  let win = Math.floor(betData[n].amt * mult);
   balance += win;
-  document.getElementById('cash'+n).innerText = 'Cashed '+win.toFixed(0);
+  document.getElementById('cash'+n).innerText = 'Cashed '+win.toLocaleString();
   document.getElementById('cash'+n).disabled = true;
-  addRow('You', betData[n].amt, mult.toFixed(2)+'x', win.toFixed(0));
+  addRow('You', betData[n].amt, mult.toFixed(2)+'x', win);
   upd();
 }
 
@@ -148,9 +147,8 @@ function round(){
   running = true;
   crashed = false;
   mult = 1.00;
-  crashAt = 1 + Math.random()*10; // 1x to 11x
+  crashAt = 1 + Math.random()*12; // 1x to 13x
   document.getElementById('mult').className = 'mult';
-  document.getElementById('status').innerText = '';
   document.getElementById('plane').style.transform = 'translate(0px,0px)';
 
   [1,2].forEach(n=>{
@@ -165,25 +163,28 @@ function round(){
 
   let int = setInterval(()=>{
     if(crashed){ clearInterval(int); return }
-    mult += 0.012 + mult*0.0006;
-    let x = mult*28, y = -mult*9;
+    mult += 0.015 + mult*0.0007;
+    let x = mult*30, y = -mult*10;
     document.getElementById('plane').style.transform = `translate(${x}px,${y}px)`;
     document.getElementById('mult').innerText = mult.toFixed(2)+'x';
-    document.getElementById('cash1').innerText = 'Cash Out '+ (betData[1].active? (betData[1].amt*mult).toFixed(0):'0');
-    document.getElementById('cash2').innerText = 'Cash Out '+ (betData[2].active? (betData[2].amt*mult).toFixed(0):'0');
+
+    // Cashout button live update
+    if(betData[1].active &&!betData[1].cashed)
+      document.getElementById('cash1').innerText = 'Cash Out '+ Math.floor(betData[1].amt*mult).toLocaleString();
+    if(betData[2].active &&!betData[2].cashed)
+      document.getElementById('cash2').innerText = 'Cash Out '+ Math.floor(betData[2].amt*mult).toLocaleString();
 
     if(mult >= crashAt){
       crashed = true;
       running = false;
       document.getElementById('mult').innerText = mult.toFixed(2)+'x FLEW AWAY!';
       document.getElementById('mult').className = 'mult crash';
-      document.getElementById('status').innerText = 'Round ended';
       histArr.unshift(mult);
       if(histArr.length>10) histArr.pop();
       drawHist();
-      setTimeout(round, 4000);
+      setTimeout(round, 3500);
     }
-  }, 45);
+  }, 40);
 }
 
 function drawHist(){
@@ -197,22 +198,22 @@ function addRow(u,b,m,c){
   let t = document.getElementById('tbl');
   let r = t.insertRow(0);
   r.innerHTML = `<td class="me">${u}</td><td>${b}</td><td class="win">${m}</td><td class="win">${c}</td>`;
-  if(t.rows.length>12) t.deleteRow(12);
+  if(t.rows.length>15) t.deleteRow(15);
 }
 
 // Fake players
 setInterval(()=>{
-  if(!running && Math.random()>0.6){
+  if(!running && Math.random()>0.5){
     let u = '***'+(10+Math.floor(Math.random()*90));
-    let b = [100,500,1000,5000][Math.floor(Math.random()*4)];
-    let m = (1+Math.random()*2.5).toFixed(2);
-    addRow(u,b,m+'x',(b*m).toFixed(0));
+    let b = [500,1000,5000,10000][Math.floor(Math.random()*4)];
+    let m = (1+Math.random()*3).toFixed(2);
+    addRow(u,b,m+'x',Math.floor(b*m));
   }
-}, 1800);
+}, 1500);
 
 drawHist();
 upd();
 setTimeout(round, 3000);
 </script>
 </body>
-</html>
+  </html>
